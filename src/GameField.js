@@ -8,7 +8,7 @@ const GameField = () => {
   const gameContext = useContext(GameContext)
   return (
       <>
-        {gameContext.game.winner && <Modal onClose={gameContext.onWin}/>}
+        {gameContext.game.winner && <Modal/>}
         <header className={classes.header}>
           <h1>Welcome to yet another Tic-Tac-Toe Game!</h1>
         </header>

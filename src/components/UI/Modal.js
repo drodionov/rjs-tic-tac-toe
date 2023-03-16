@@ -11,17 +11,24 @@ const portalElement = document.getElementById('overlays')
 
 const ModalOverlay = props => {
   return <div className={classes.modal}>
-    <div className={classes.content}>{props.children}</div>
+    <div>{props.children}</div>
   </div>
 }
 
-const Modal = ({onClose}) => {
+const Modal = () => {
   const gameContext = useContext(GameContext)
-
+  let content
+  if (gameContext.game.winner === '-') {
+    content = <p>It's SPARE</p>
+  } else {
+    content = <p>Congrats! We have a winner:
+      Player {gameContext.game.winner}</p>
+  }
   return <>
-    {ReactDOM.createPortal(<Backdrop onClose={onClose}/>, portalElement)}
-    {ReactDOM.createPortal(<ModalOverlay>Congrats! We have a winner:
-          Player {gameContext.game.winner}</ModalOverlay>,
+    {ReactDOM.createPortal(<Backdrop onClose={gameContext.onWin}/>,
+        portalElement)}
+    {ReactDOM.createPortal(
+        <ModalOverlay>{content}</ModalOverlay>,
         portalElement)}
   < />
 }

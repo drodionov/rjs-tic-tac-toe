@@ -10,6 +10,7 @@
 
 .modal {
   position: fixed;
+  text-align: center;
   top: 20vh;
   left: 5%;
   width: 90%;

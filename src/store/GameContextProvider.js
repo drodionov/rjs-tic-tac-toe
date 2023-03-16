@@ -14,12 +14,17 @@ const WIN_COMBINATIONS = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7],
   [0, 4, 8], [2, 4, 6]]
 
 const checkWinner = field => {
+
   for (let i = 0; i < WIN_COMBINATIONS.length; i++) {
     const [firstMatch, secondMatch, thirdMatch] = WIN_COMBINATIONS[i]
     if (field[firstMatch] && field[firstMatch] === field[secondMatch]
         && field[secondMatch] === field[thirdMatch]) {
       return field[firstMatch]
     }
+  }
+
+  if (field.every((fieldVal) => fieldVal !== undefined)) {
+    return '-'
   }
 
   return undefined
