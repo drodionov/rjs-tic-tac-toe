@@ -1,23 +1,16 @@
 import Cell from "./Cell";
 import classes from './Cells.module.css'
-import {useState} from "react";
+import {useContext} from "react";
+import GameContext from "../../store/game-context";
 
 const Cells = () => {
-  const [cells, setCells] = useState(['X', '', 'O', '', '', '', '', '', 'X'])
+  const gameContext = useContext(GameContext)
 
   const onClickHandler = (idx) => {
-    setCells(prevState => {
-      return prevState.map((value, i) => {
-        if (i === idx) {
-          return 'X';
-        } else {
-          return value;
-        }
-      });
-    })
+    gameContext.onTurn(idx)
   }
 
-  const formattedCells = cells.map(
+  const formattedCells = gameContext.game.field.map(
       (value, idx) => <div className={classes.cell} key={idx}
                            onClick={onClickHandler.bind(null, idx)}><Cell
           value={value}
