@@ -1,4 +1,5 @@
 import classes from './App.module.css'
+import Cells from "./components/Cell/Cells";
 
 const App = () => {
   return (
@@ -6,6 +7,7 @@ const App = () => {
         <header className={classes.header}>
           <h1>Welcome to yet another Tic-Tac-Toe Game!</h1>
         </header>
+        <div className={classes.cells}><Cells/></div>
       </main>
   )
 }

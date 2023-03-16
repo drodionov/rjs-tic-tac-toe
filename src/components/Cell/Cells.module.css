@@ -1,0 +1,10 @@
+.cells {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.cell {
+  width: calc(33.33% - 10px);
+  margin-bottom: 10px;
+}
