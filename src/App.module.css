@@ -1,0 +1,7 @@
+:global(body) {
+  background-color: gray;
+}
+
+.header {
+  text-align: center;
+}
