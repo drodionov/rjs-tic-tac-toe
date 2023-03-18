@@ -1,5 +1,5 @@
-import GameContext from "./game-context";
-import {useReducer} from "react";
+import GameContext from "./game-context"
+import {useCallback, useReducer} from "react"
 
 const INITIAL_STATE = {
   field: [undefined, undefined, undefined, undefined, undefined, undefined,
@@ -10,8 +10,7 @@ const INITIAL_STATE = {
 }
 
 const WIN_COMBINATIONS = [[0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7],
-  [2, 5, 8],
-  [0, 4, 8], [2, 4, 6]]
+  [2, 5, 8], [0, 4, 8], [2, 4, 6]]
 
 const checkWinner = field => {
 
@@ -30,36 +29,75 @@ const checkWinner = field => {
   return undefined
 }
 
+const getRandomInt = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
+const getCellIdForTheZeroPlayerTurn = (field) => {
+  const emptyCellsIds = field.reduce((ids, cell, id) => {
+    if (cell === undefined) {
+      ids.push(id)
+    }
+    return ids
+  }, []);
+  const randomFreeCellId = getRandomInt(0, emptyCellsIds.length - 1)
+  return emptyCellsIds[randomFreeCellId]
+}
+
+const updateCellForPlayer = (updatedState, fieldId) => {
+  updatedState.field = updatedState.field.map((value, i) => {
+    if (i === fieldId) {
+      return updatedState.currentPlayer
+    } else {
+      return value
+    }
+  })
+}
+
+const checkAndSetWinner = (updatedState) => {
+  if (updatedState.turnCount >= 4) {
+    const winner = checkWinner(updatedState.field)
+    if (winner) {
+      updatedState.winner = winner
+      return winner
+    }
+  }
+
+  return undefined
+}
+
+const nextTurnRoutines = (updatedState) => {
+  updatedState.turnCount++
+  updatedState.currentPlayer = updatedState.currentPlayer === 'X' ? 'O'
+      : 'X'
+}
+
 const gameReducer = (state, action) => {
+  const updatedState = {...state}
   switch (action.type) {
     case 'ON_TURN':
       if (state.field[action.fieldId]) {
         return state
       }
 
-      const updatedState = {...state}
-      updatedState.field = updatedState.field.map((value, i) => {
-        if (i === action.fieldId) {
-          return updatedState.currentPlayer
-        } else {
-          return value
-        }
-      })
-
-      const winner = checkWinner(updatedState.field)
-      if (winner) {
-        updatedState.winner = winner
+      updateCellForPlayer(updatedState, action.fieldId)
+      nextTurnRoutines(updatedState)
+      if (checkAndSetWinner(updatedState)) {
         return updatedState
       }
-
-      updatedState.turnCount++
-      updatedState.currentPlayer = updatedState.currentPlayer === 'X' ? 'O'
-          : 'X'
+      return updatedState
+    case 'ZERO_PLAYER_TURN':
+      updateCellForPlayer(updatedState,
+          getCellIdForTheZeroPlayerTurn(updatedState.field))
+      nextTurnRoutines(updatedState)
+      if (checkAndSetWinner(updatedState)) {
+        return updatedState
+      }
       return updatedState
     case 'RESET_GAME':
       return INITIAL_STATE
     default:
-      return state
+      return updatedState
   }
 }
 
@@ -75,10 +113,17 @@ const GameContextProvider = (props) => {
     dispatchGameAction({type: 'RESET_GAME'})
   }
 
+  const onZeroPlayerTurnHandler = useCallback(() => {
+    setTimeout(() => {
+      dispatchGameAction({type: 'ZERO_PLAYER_TURN'})
+    }, 2000)
+  }, [])
+
   const gameContext = {
     game: gameState,
     onTurn: onTurnHandler,
-    onWin: onWinHandler
+    onWin: onWinHandler,
+    onZeroPlayerTurn: onZeroPlayerTurnHandler
   }
 
   return <GameContext.Provider value={gameContext}>

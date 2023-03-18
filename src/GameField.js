@@ -6,6 +6,12 @@ import Modal from "./components/UI/Modal";
 
 const GameField = () => {
   const gameContext = useContext(GameContext)
+  let content
+  if (gameContext.game.currentPlayer === 'X') {
+    content = <h2>Your turn!</h2>
+  } else {
+    content = <h2>Opponent's turn!</h2>
+  }
   return (
       <>
         {gameContext.game.winner && <Modal/>}
@@ -13,8 +19,7 @@ const GameField = () => {
           <h1>Welcome to yet another Tic-Tac-Toe Game!</h1>
         </header>
         <main className={classes.root}>
-          <h2>Turn: {gameContext.game.turnCount}.
-            Player: {gameContext.game.currentPlayer}.</h2>
+          {content}
           <div className={classes.cells}><Cells/></div>
         </main>
       </>

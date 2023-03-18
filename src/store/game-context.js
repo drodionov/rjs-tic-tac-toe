@@ -9,6 +9,8 @@ const GameContext = createContext({
   },
   onTurn: () => {
   },
+  onZeroPlayerTurn: () => {
+  },
   onWin: () => {
   }
 })
