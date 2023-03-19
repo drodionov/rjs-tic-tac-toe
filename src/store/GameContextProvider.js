@@ -45,7 +45,7 @@ const getCellIdForTheZeroPlayerTurn = (field) => {
 }
 
 const getCellIdForZeroPlayerMedium = (field) => {
-  for (let i = 0; i < WIN_COMBINATIONS.length - 1; i++) {
+  for (let i = 0; i < WIN_COMBINATIONS.length; i++) {
     const [firstMatch, secondMatch, thirdMatch] = WIN_COMBINATIONS[i]
     let cellId = undefined
     if (field[firstMatch] === 'X' && field[firstMatch] === field[secondMatch]) {

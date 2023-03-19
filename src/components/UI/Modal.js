@@ -21,7 +21,7 @@ const Modal = () => {
   if (gameContext.game.winner === '-') {
     content = <p>It's SPARE</p>
   } else {
-    content = gameContext.game.winner === 'X' ? "You win!" : "You      lose!"
+    content = gameContext.game.winner === 'X' ? "You win!" : "You lose!"
   }
   return <>
     {ReactDOM.createPortal(<Backdrop onClose={gameContext.onWin}/>,
