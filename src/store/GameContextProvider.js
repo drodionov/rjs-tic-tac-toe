@@ -128,15 +128,19 @@ const GameContextProvider = (props) => {
       undefined)
 
   const onTurnHandler = fieldId => {
+    console.log('ON_TURN: ' + fieldId)
     dispatchGameAction({type: 'ON_TURN', fieldId})
   }
 
   const onWinHandler = () => {
+    console.log("Win!")
     dispatchGameAction({type: 'RESET_GAME'})
   }
 
   const onZeroPlayerTurnHandler = useCallback(() => {
+    console.log("Zero started to think")
     setTimeout(() => {
+      console.log("Zero makes move!")
       dispatchGameAction({type: 'ZERO_PLAYER_TURN'})
     }, 1000)
   }, [])

@@ -14,7 +14,8 @@ const Cells = () => {
   }
 
   useEffect(() => {
-    if (gameContext.game.currentPlayer === 'O') {
+    if (gameContext.game.currentPlayer === 'O' && gameContext.game.winner
+        === undefined) {
       gameContext.onZeroPlayerTurn()
     }
   }, [gameContext])
