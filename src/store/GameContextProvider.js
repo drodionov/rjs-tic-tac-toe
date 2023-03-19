@@ -2,8 +2,7 @@ import GameContext from "./game-context"
 import {useCallback, useReducer} from "react"
 
 const INITIAL_STATE = {
-  field: [undefined, undefined, undefined, undefined, undefined, undefined,
-    undefined, undefined, undefined],
+  field: new Array(9).fill(undefined),
   turnCount: 0,
   currentPlayer: 'X',
   winner: undefined
