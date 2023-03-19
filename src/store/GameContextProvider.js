@@ -44,6 +44,28 @@ const getCellIdForTheZeroPlayerTurn = (field) => {
   return emptyCellsIds[randomFreeCellId]
 }
 
+const getCellIdForZeroPlayerMedium = (field) => {
+  for (let i = 0; i < WIN_COMBINATIONS.length - 1; i++) {
+    const [firstMatch, secondMatch, thirdMatch] = WIN_COMBINATIONS[i]
+    let cellId = undefined
+    if (field[firstMatch] === 'X' && field[firstMatch] === field[secondMatch]) {
+      cellId = thirdMatch
+    }
+    if (field[secondMatch] === 'X' && field[secondMatch]
+        === field[thirdMatch]) {
+      cellId = firstMatch
+    }
+    if (field[firstMatch] === 'X' && field[firstMatch] === field[thirdMatch]) {
+      cellId = secondMatch
+    }
+    if (cellId !== undefined && field[cellId] === undefined) {
+      return cellId
+    }
+  }
+
+  return getCellIdForTheZeroPlayerTurn(field)
+}
+
 const updateCellForPlayer = (updatedState, fieldId) => {
   updatedState.field = updatedState.field.map((value, i) => {
     if (i === fieldId) {
@@ -88,7 +110,7 @@ const gameReducer = (state, action) => {
       return updatedState
     case 'ZERO_PLAYER_TURN':
       updateCellForPlayer(updatedState,
-          getCellIdForTheZeroPlayerTurn(updatedState.field))
+          getCellIdForZeroPlayerMedium(updatedState.field))
       nextTurnRoutines(updatedState)
       if (checkAndSetWinner(updatedState)) {
         return updatedState
