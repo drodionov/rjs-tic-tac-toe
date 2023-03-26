@@ -16,7 +16,7 @@ const GameField = () => {
       <>
         {game.winner && <Modal/>}
         <header className={classes.header}>
-          <h1>Welcome to yet another Tic-Tac-Toe Game!</h1>
+          <h1>Welcome to yet another Tic-Tac-Toe Game [ReactJS & Redux]!</h1>
         </header>
         <main className={classes.root}>
           {content}
