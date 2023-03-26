@@ -98,7 +98,7 @@ const gameSlice = createSlice({
         return state
       }
 
-      if (action.payload) {
+      if (state.currentPlayer === 'X') {
         updateCellForPlayer(state, action.payload)
       } else {
         updateCellForPlayer(state,
