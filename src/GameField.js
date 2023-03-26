@@ -1,20 +1,20 @@
 import classes from './App.module.css'
 import Cells from "./components/Cell/Cells";
-import {useContext} from "react";
-import GameContext from "./store/game-context";
 import Modal from "./components/UI/Modal";
+import {useSelector} from "react-redux";
 
 const GameField = () => {
-  const gameContext = useContext(GameContext)
+  const game = useSelector(state => state.game)
+
   let content
-  if (gameContext.game.currentPlayer === 'X') {
+  if (game.currentPlayer === 'X') {
     content = <h2>Your turn!</h2>
   } else {
     content = <h2>Opponent's turn!</h2>
   }
   return (
       <>
-        {gameContext.game.winner && <Modal/>}
+        {game.winner && <Modal/>}
         <header className={classes.header}>
           <h1>Welcome to yet another Tic-Tac-Toe Game!</h1>
         </header>

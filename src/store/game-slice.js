@@ -1,5 +1,4 @@
-import GameContext from "./game-context"
-import {useCallback, useReducer} from "react"
+import {createSlice} from "@reduxjs/toolkit";
 
 const INITIAL_STATE = {
   field: new Array(9).fill(undefined),
@@ -80,11 +79,8 @@ const checkAndSetWinner = (updatedState) => {
     const winner = checkWinner(updatedState.field)
     if (winner) {
       updatedState.winner = winner
-      return winner
     }
   }
-
-  return undefined
 }
 
 const nextTurnRoutines = (updatedState) => {
@@ -93,67 +89,28 @@ const nextTurnRoutines = (updatedState) => {
       : 'X'
 }
 
-const gameReducer = (state, action) => {
-  const updatedState = {...state}
-  switch (action.type) {
-    case 'ON_TURN':
-      if (state.field[action.fieldId]) {
+const gameSlice = createSlice({
+  name: 'game',
+  initialState: INITIAL_STATE,
+  reducers: {
+    turn(state, action) {
+      if (state.field[action.payload]) {
         return state
       }
 
-      updateCellForPlayer(updatedState, action.fieldId)
-      nextTurnRoutines(updatedState)
-      if (checkAndSetWinner(updatedState)) {
-        return updatedState
+      if (action.payload) {
+        updateCellForPlayer(state, action.payload)
+      } else {
+        updateCellForPlayer(state,
+            getCellIdForZeroPlayerMedium(state.field))
       }
-      return updatedState
-    case 'ZERO_PLAYER_TURN':
-      updateCellForPlayer(updatedState,
-          getCellIdForZeroPlayerMedium(updatedState.field))
-      nextTurnRoutines(updatedState)
-      if (checkAndSetWinner(updatedState)) {
-        return updatedState
-      }
-      return updatedState
-    case 'RESET_GAME':
-      return INITIAL_STATE
-    default:
-      return updatedState
+      nextTurnRoutines(state)
+      checkAndSetWinner(state)
+    },
+    resetGame() {
+      return {...INITIAL_STATE}
+    }
   }
-}
+})
 
-const GameContextProvider = (props) => {
-  const [gameState, dispatchGameAction] = useReducer(gameReducer, INITIAL_STATE,
-      undefined)
-
-  const onTurnHandler = fieldId => {
-    console.log('ON_TURN: ' + fieldId)
-    dispatchGameAction({type: 'ON_TURN', fieldId})
-  }
-
-  const onWinHandler = () => {
-    console.log("Win!")
-    dispatchGameAction({type: 'RESET_GAME'})
-  }
-
-  const onZeroPlayerTurnHandler = useCallback(() => {
-    console.log("Zero started to think")
-    setTimeout(() => {
-      console.log("Zero makes move!")
-      dispatchGameAction({type: 'ZERO_PLAYER_TURN'})
-    }, 1000)
-  }, [])
-
-  const gameContext = {
-    game: gameState,
-    onTurn: onTurnHandler,
-    onWin: onWinHandler,
-    onZeroPlayerTurn: onZeroPlayerTurnHandler
-  }
-
-  return <GameContext.Provider value={gameContext}>
-    {props.children}
-  </GameContext.Provider>
-}
-
-export default GameContextProvider
+export default gameSlice

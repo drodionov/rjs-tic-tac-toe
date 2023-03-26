@@ -1,30 +1,35 @@
 import Cell from "./Cell";
 import classes from './Cells.module.css'
-import {useContext, useEffect} from "react";
-import GameContext from "../../store/game-context";
+import {useEffect} from "react";
+import {useDispatch, useSelector} from "react-redux";
+import {gameAction} from "../../store";
 
 const Cells = () => {
-  const gameContext = useContext(GameContext)
+  const game = useSelector(state => state.game)
+  const dispatch = useDispatch()
 
   const onClickHandler = (idx) => {
-    if (gameContext.game.currentPlayer === 'O') {
+    if (game.currentPlayer === 'O') {
       return
     }
-    gameContext.onTurn(idx)
+    dispatch(gameAction.turn(idx))
   }
 
   useEffect(() => {
-    if (gameContext.game.currentPlayer === 'O' && gameContext.game.winner
-        === undefined) {
-      gameContext.onZeroPlayerTurn()
-    }
-  }, [gameContext])
+    if (game.currentPlayer === 'O' && game.winner === undefined) {
+      setTimeout(() => {
+        console.log("Zero makes move!")
+        dispatch(gameAction.turn())
+      }, 1000)
 
-  const formattedCells = gameContext.game.field.map(
+    }
+  }, [game, dispatch])
+
+  const formattedCells = game.field.map(
       (value, idx) => <div className={classes.cell} key={idx}
-                           onClick={onClickHandler.bind(null, idx)}><Cell
-          value={value}
-      />
+                           onClick={onClickHandler.bind(null, idx)}>
+        <Cell value={value}
+        />
       </div>)
 
   return <div className={classes.cells}>

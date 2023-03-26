@@ -1,7 +1,7 @@
 import ReactDOM from "react-dom";
 import classes from './Modal.module.css'
-import {useContext} from "react";
-import GameContext from "../../store/game-context";
+import {useSelector, useDispatch} from "react-redux";
+import {gameAction} from "../../store";
 
 const Backdrop = ({onClose}) => {
   return <div className={classes.backdrop} onClick={onClose}/>
@@ -16,15 +16,21 @@ const ModalOverlay = props => {
 }
 
 const Modal = () => {
-  const gameContext = useContext(GameContext)
+  const game = useSelector(state => state.game)
+  const dispatch = useDispatch()
   let content
-  if (gameContext.game.winner === '-') {
+  if (game.winner === '-') {
     content = <p>It's SPARE</p>
   } else {
-    content = gameContext.game.winner === 'X' ? "You win!" : "You lose!"
+    content = game.winner === 'X' ? "You win!" : "You lose!"
   }
+
+  const onCloseHandler = () => {
+    dispatch(gameAction.resetGame())
+  }
+
   return <>
-    {ReactDOM.createPortal(<Backdrop onClose={gameContext.onWin}/>,
+    {ReactDOM.createPortal(<Backdrop onClose={onCloseHandler}/>,
         portalElement)}
     {ReactDOM.createPortal(
         <ModalOverlay><p>{content}</p></ModalOverlay>,
