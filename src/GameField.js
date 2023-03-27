@@ -1,7 +1,7 @@
 import classes from './App.module.css'
-import Cells from "./components/Cell/Cells";
-import Modal from "./components/UI/Modal";
-import {useSelector} from "react-redux";
+import Cells from "./components/Cell/Cells"
+import Modal from "./components/UI/Modal"
+import {useSelector} from "react-redux"
 
 const GameField = () => {
   const game = useSelector(state => state.game)

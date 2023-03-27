@@ -1,8 +1,8 @@
-import Cell from "./Cell";
+import Cell from "./Cell"
 import classes from './Cells.module.css'
-import {useEffect} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {gameAction} from "../../store";
+import {useEffect} from "react"
+import {useDispatch, useSelector} from "react-redux"
+import {gameAction, zeroTurn} from "../../store/game-actions"
 
 const Cells = () => {
   const game = useSelector(state => state.game)
@@ -17,11 +17,7 @@ const Cells = () => {
 
   useEffect(() => {
     if (game.currentPlayer === 'O' && game.winner === undefined) {
-      setTimeout(() => {
-        console.log("Zero makes move!")
-        dispatch(gameAction.turn())
-      }, 1000)
-
+      dispatch(zeroTurn())
     }
   }, [game, dispatch])
 

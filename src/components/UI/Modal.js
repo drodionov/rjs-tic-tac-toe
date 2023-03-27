@@ -1,7 +1,7 @@
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom"
 import classes from './Modal.module.css'
-import {useSelector, useDispatch} from "react-redux";
-import {gameAction} from "../../store";
+import {useDispatch, useSelector} from "react-redux"
+import {gameAction} from "../../store/game-actions"
 
 const Backdrop = ({onClose}) => {
   return <div className={classes.backdrop} onClick={onClose}/>

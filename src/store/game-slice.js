@@ -1,4 +1,4 @@
-import {createSlice} from "@reduxjs/toolkit";
+import {createSlice} from "@reduxjs/toolkit"
 
 const INITIAL_STATE = {
   field: new Array(9).fill(undefined),
@@ -37,7 +37,7 @@ const getCellIdForTheZeroPlayerTurn = (field) => {
       ids.push(id)
     }
     return ids
-  }, []);
+  }, [])
   const randomFreeCellId = getRandomInt(0, emptyCellsIds.length - 1)
   return emptyCellsIds[randomFreeCellId]
 }
@@ -101,8 +101,7 @@ const gameSlice = createSlice({
       if (state.currentPlayer === 'X') {
         updateCellForPlayer(state, action.payload)
       } else {
-        updateCellForPlayer(state,
-            getCellIdForZeroPlayerMedium(state.field))
+        updateCellForPlayer(state, getCellIdForZeroPlayerMedium(state.field))
       }
       nextTurnRoutines(state)
       checkAndSetWinner(state)
